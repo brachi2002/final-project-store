@@ -565,15 +565,21 @@ function removeFromFavorites(productId) {
 function updateFavoriteIcons() {
     document.querySelectorAll('.favorite-icon').forEach(icon => {
         const productId = icon.getAttribute('data-product-id');
-        if (favorites.includes(productId.toString())) {
-            icon.classList.add('filled');
-            icon.innerHTML = '<i class="fas fa-heart"></i>';
+        if (productId) {
+            if (favorites.includes(productId.toString())) {
+                icon.classList.add('filled');
+                icon.innerHTML = '<i class="fas fa-heart"></i>';
+            } else {
+                icon.classList.remove('filled');
+                icon.innerHTML = '<i class="far fa-heart"></i>';
+            }
         } else {
-            icon.classList.remove('filled');
-            icon.innerHTML = '<i class="far fa-heart"></i>';
+            console.warn('No data-product-id attribute found on element:', icon);
         }
     });
 }
+
+
 
 function updateProductFavoriteIcon(productId) {
     const productFavoriteIcon = document.getElementById('product-favorite-icon');
