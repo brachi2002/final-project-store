@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html"><img src="logo.svg" alt="Logo"></a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="women.html">Women</a></li>
+            <li><a href="men.html">Men</a></li>
+        </ul>
+        <div class="search-bar-container">
+            <div class="search-bar">
+                <input type="text" id="search-bar" placeholder="Search for items and brands">
+                <button onclick="searchProducts()"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+        <div class="nav-icons">
+            <a href="#"><i class="fas fa-user"></i></a>
+            <a href="favorites.html"><i class="fas fa-heart"></i></a>
+            <a href="cart.html" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-badge" class="cart-badge"></span>
+            </a>
+        </div>
+    </nav>
+    <nav class="category-navbar">
+        <ul id="home-category-menu" class="category-links"></ul>
+    </nav>
+    <main>
+        <section class="product-container">
+            <div class="product-images">
+                <img id="main-product-image" src="" alt="Product Image">
+                <div id="product-image-carousel"></div>
+                <div class="arrows">
+                    <span onclick="changeImage(-1)">&#10094;</span>
+                    <span onclick="changeImage(1)">&#10095;</span>
+                </div>
+            </div>
+            <div class="product-details">
+                <h1 id="product-title"></h1>
+                <p id="product-description"></p>
+                <p id="product-price"></p>
+                <div id="product-rating"></div>
+                <div class="actions">
+                    <button onclick="addToCart()">Add to Bag</button>
+                    <div class="favorite-icon" id="product-favorite-icon"><i class="far fa-heart"></i></div>
+                </div>
+                <div class="product-info">
+                    <p id="product-brand"></p>
+                </div>
+                <div class="product-additional-info">
+                    <p>Free delivery on qualifying orders.</p>
+                    <p>Free Returns</p>
+                    <p><a href="#">View our Delivery & Returns Policy</a></p>
+                </div>
+            </div>
+        </section>
+        <div class="product-reviews">
+            <h2>Customer Reviews</h2>
+            <div id="reviews-container"></div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-columns">
+            <div>
+                <h4>Help & Information</h4>
+                <ul>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Track order</a></li>
+                    <li><a href="#">Delivery & returns</a></li>
+                    <li><a href="#">ASOS Premier</a></li>
+                    <li><a href="#">10% Student Discount</a></li>
+                    <li><a href="#">Sitemap</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>About ASOS</h4>
+                <ul>
+                    <li><a href="#">About us</a></li>
+                    <li><a href="#">Careers at ASOS</a></li>
+                    <li><a href="#">Corporate responsibility</a></li>
+                    <li><a href="#">Investors' site</a></li>
+                    <li><a href="#">Cyber Security</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>More From ASOS</h4>
+                <ul>
+                    <li><a href="#">Mobile and ASOS apps</a></li>
+                    <li><a href="#">ASOS Marketplace</a></li>
+                    <li><a href="#">Gift vouchers</a></li>
+                    <li><a href="#">Corporate gift vouchers</a></li>
+                    <li><a href="#">Black Friday</a></li>
+                    <li><a href="#">ASOS x Thrift+</a></li>
+                    <li><a href="#">Refer A Friend</a></li>
+                    <li><a href="#">Info for Partners</a></li>
+                    <li><a href="#">Discover the ASOS Credit Card</a></li>
+                    <li><a href="#">Help Improve the ASOS Website</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Shopping From</h4>
+                <p>You're in <strong>UK</strong> | <a href="#">Change</a></p>
+                <p>Some of our international sites:</p>
+                <ul>
+                    <li><a href="#">Germany</a></li>
+                    <li><a href="#">Australia</a></li>
+                    <li><a href="#">France</a></li>
+                    <li><a href="#">USA</a></li>
+                    <li><a href="#">Denmark</a></li>
+                    <li><a href="#">Italy</a></li>
+                    <li><a href="#">Spain</a></li>
+                    <li><a href="#">Sweden</a></li>
+                    <li><a href="#">Poland</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Contact us at info@digitalstore.com</p>
+            <p>Need help? <a href="mailto:support@digitalstore.com">Email support</a></p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
