@@ -328,8 +328,8 @@ function searchProducts() {
 }
 
 function performSearch(query) {
-   const advertisingImage = document.getElementById('advertising-image');
-   advertisingImage.style.display = 'none';
+    const advertisingImage = document.getElementById('advertising-image');
+    advertisingImage.style.display = 'none';
     fetch(`https://dummyjson.com/products/search?q=${query}`)
         .then(response => response.json())
         .then(data => {
@@ -340,25 +340,28 @@ function performSearch(query) {
                     let secondaryImage = product.images[1] ? product.images[1] : product.thumbnail;
                     let div = document.createElement('div');
                     div.className = 'product-card';
-                    div.innerHTML = `
-                        <a href="product.html?id=${product.id}">
-                            <div class="product-image">
-                                <img src="${product.thumbnail}" alt="${product.title}" class="primary">
-                                <img src="${secondaryImage}" alt="${product.title}" class="secondary">
-                            </div>
-                            <h3>${product.title}</h3>
-                            <p>$${product.price}</p>
-                        </a>
-                        <div class="favorite-icon ${favorites.includes(product.id.toString()) ? 'filled' : ''}" data-product-id="${product.id}" onclick="toggleFavorite(this, ${product.id})"><i class="far fa-heart"></i></div>
-                    `;
+                div.innerHTML = `
+                    <a href="product.html?id=${product.id}">
+                        <div class="product-image">
+                            <img src="${product.thumbnail}" alt="${product.title}" class="primary">
+                            <img src="${secondaryImage}" alt="${product.title}" class="secondary">
+                        </div>
+                        <h3>${product.title}</h3>
+                        <p>$${product.price}</p>
+                    </a>
+                    <div class="favorite-icon ${favorites.includes(product.id.toString()) ? 'filled' : ''}" data-product-id="${product.id}" onclick="toggleFavorite(this, ${product.id})"><i class="far fa-heart"></i></div>
+                `;
                     productList.appendChild(div);
                 });
                 updateFavoriteIcons();
-
+               
             }
         })
         .catch(error => console.error('Error fetching search results:', error));
 }
+
+
+
 
 function viewProduct(productId) {
     window.location.href = `product.html?id=${productId}`;
@@ -371,7 +374,6 @@ function loadProductDetails(productId) {
             document.getElementById('product-title').innerText = product.title;
             document.getElementById('product-description').innerText = product.description;
             document.getElementById('product-price').innerText = `$${product.price}`;
-            document.getElementById('product-brand').innerText = product.brand || 'No brand';
 
             const mainImage = document.getElementById('main-product-image');
             mainImage.src = product.thumbnail;
