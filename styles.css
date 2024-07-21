@@ -950,8 +950,11 @@ main {
 
 /* Styles for the thank you message and continue shopping button */
 .thank-you-message {
+    align-self: center;
+    align-items: center;
     text-align: center;
-    padding: 50px 20px;
+    padding: 100px 50px;
+    width: 100%;
 }
 
 .thank-you-message h2 {

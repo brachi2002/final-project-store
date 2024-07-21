@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
         attachBuyButtonListener();
     }
 
+    if(page !== 'checkout.html')
     updateCartBadge(); // Update the cart badge on page load
 
     
