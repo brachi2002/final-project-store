@@ -666,9 +666,67 @@ function addToCart() {
         cart.push({ id: productId, quantity: 1 });
     }
     localStorage.setItem('cart', JSON.stringify(cart));
-    alert('Product added to cart');
+    // alert('Product added to cart');
     updateCartBadge(); // Update the cart badge when an item is added to the cart
+    showCartSlideWindow();
+
 }
+
+async function fetchProductById(productId) {
+    try {
+        const response = await fetch(`https://dummyjson.com/products/${productId}`);
+        const product = await response.json();
+        return product;
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        return null;
+    }
+}
+
+async function showCartSlideWindow() {
+    const cartSlideWindow = document.getElementById('cart-slide-window');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartItemCount = document.getElementById('cart-item-count');
+    const cartSubtotal = document.getElementById('cart-subtotal');
+    
+    cartItemsContainer.innerHTML = ''; // Clear previous content
+    let subtotal = 0;
+
+    for (const cartItem of cart) {
+        const product = await fetchProductById(cartItem.id);
+        if (product) {
+            subtotal += product.price * cartItem.quantity;
+            const itemDiv = document.createElement('div');
+            itemDiv.innerHTML = `
+                <img src="${product.thumbnail}" alt="${product.title}" width="100">
+                <p>${product.title}</p>
+                <p>${product.color ? product.color : 'undefined'}, ${cartItem.size ? cartItem.size : 'undefined'}</p>
+                <p>Qty: ${cartItem.quantity}</p>
+                <p>£${(product.price * cartItem.quantity).toFixed(2)}</p>
+            `;
+            cartItemsContainer.appendChild(itemDiv);
+        }
+    }
+
+    cartItemCount.innerText = cart.length;
+    cartSubtotal.innerText = `Sub-total: £${subtotal.toFixed(2)}`;
+    
+    cartSlideWindow.classList.add('open');
+
+    // Automatically close the slide window after a few seconds
+    setTimeout(() => {
+        cartSlideWindow.classList.remove('open');
+    }, 5000);
+}
+
+function viewBag() {
+    window.location.href = 'cart.html';
+}
+
+function checkout() {
+    window.location.href = 'checkout.html';
+}
+
 
 function moveToBag(productId) {
     console.log('moveToBag called with productId:', productId);
@@ -697,6 +755,7 @@ function moveToBag(productId) {
         console.log('Cart products element not found');
     }
     updateCartBadge(); // Update the cart badge when an item is moved to the bag
+    showCartSlideWindow();
 }
 
 // Checkout related functions
