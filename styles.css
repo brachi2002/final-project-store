@@ -1274,7 +1274,8 @@ img {
     .arrows{
         transform: translateY(-600%);
     }
-    
+}
+
 .cart-slide-window {
     position: fixed;
     top: 0;
