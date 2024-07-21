@@ -1280,8 +1280,10 @@ img {
     position: fixed;
     top: 0;
     right: -400px;
-    width: 400px;
+    width: auto;
     height: 100%;
+    display: flex;
+    flex-direction: column;
     overflow-y:auto;
     background-color: white;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
@@ -1294,14 +1296,16 @@ img {
 }
 
 .cart-content {
+    flex: 1;
     padding: 20px;
+    overflow-y: auto;
 }
 
 .cart-footer {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
+    padding: 20px;
+    background-color: white;
     text-align: center;
+    margin-top: auto;
 }
 
 .cart-footer button {
@@ -1316,3 +1320,4 @@ img {
 .cart-footer button:hover {
     background-color: darkgreen;
 }
+
