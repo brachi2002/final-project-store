@@ -3,8 +3,11 @@ let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let currentImageIndex = 0;
 
+
 document.addEventListener('DOMContentLoaded', function() {
     const page = window.location.pathname.split('/').pop();
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchQuery = urlParams.get('search');
 
     console.log('Page loaded:', page);
 
@@ -17,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
             setActiveCategory(document.querySelector('#home-category-menu li:first-child'), document.getElementById('home-category-menu'));
             advertisingImage.style.display = 'none';
         });
+        if (searchQuery) {
+            performSearch(searchQuery);
+        }
     } else if (page === 'women.html') {
         loadCategories('women');
         // loadFeaturedProducts('women');
@@ -49,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else if (page === 'checkout.html') {
         loadCheckoutItems();
         initializeCheckout();
+        attachBuyButtonListener();
     }
 
     updateCartBadge(); // Update the cart badge on page load
@@ -162,7 +169,7 @@ function loadCardDetails() {
 
 function displaySavedCard(cardDetails) {
     const cardText = `
-        <img src="mastercard-logo.png" alt="Mastercard Logo" style="width: 40px; height: auto;">
+        <img src="mastercard.jpeg" alt="Mastercard Logo" style="width: 20px; height: auto;">
         Debit Mastercard (**** ${cardDetails.cardNumber.slice(-4)})<br>
         Exp: ${cardDetails.expiryMonth}/${cardDetails.expiryYear}<br>
         ${cardDetails.nameOnCard}
@@ -281,31 +288,73 @@ function loadCategoryProducts(category) {
         .catch(error => console.error('Error fetching category products:', error));
 }
 
+// function searchProducts() {
+//     const advertisingImage = document.getElementById('advertising-image');
+//     let query = document.getElementById('search-bar').value;
+//     fetch(`https://dummyjson.com/products/search?q=${query}`)
+//         .then(response => response.json())
+//         .then(data => {
+//             let productList = document.getElementById('featured-products');
+//             productList.innerHTML = '';
+//             data.products.forEach(product => {
+//                 let secondaryImage = product.images[1] ? product.images[1] : product.thumbnail;
+//                 let div = document.createElement('div');
+//                 div.className = 'product-card';
+//                 div.innerHTML = `
+//                     <a href="product.html?id=${product.id}">
+//                         <div class="product-image">
+//                             <img src="${product.thumbnail}" alt="${product.title}" class="primary">
+//                             <img src="${secondaryImage}" alt="${product.title}" class="secondary">
+//                         </div>
+//                         <h3>${product.title}</h3>
+//                         <p>$${product.price}</p>
+//                     </a>
+//                     <div class="favorite-icon ${favorites.includes(product.id.toString()) ? 'filled' : ''}" data-product-id="${product.id}" onclick="toggleFavorite(this, ${product.id})"><i class="far fa-heart"></i></div>
+//                 `;
+//                 productList.appendChild(div);
+//             });
+//             updateFavoriteIcons();
+//             advertisingImage.style.display = 'none';
+//         })
+//         .catch(error => console.error('Error fetching search results:', error));
+// }
+
 function searchProducts() {
     let query = document.getElementById('search-bar').value;
+    if (query) {
+        window.location.href = `index.html?search=${query}`;
+    }
+}
+
+function performSearch(query) {
+   const advertisingImage = document.getElementById('advertising-image');
+   advertisingImage.style.display = 'none';
     fetch(`https://dummyjson.com/products/search?q=${query}`)
         .then(response => response.json())
         .then(data => {
             let productList = document.getElementById('featured-products');
-            productList.innerHTML = '';
-            data.products.forEach(product => {
-                let secondaryImage = product.images[1] ? product.images[1] : product.thumbnail;
-                let div = document.createElement('div');
-                div.className = 'product-card';
-                div.innerHTML = `
-                    <a href="product.html?id=${product.id}">
-                        <div class="product-image">
-                            <img src="${product.thumbnail}" alt="${product.title}" class="primary">
-                            <img src="${secondaryImage}" alt="${product.title}" class="secondary">
-                        </div>
-                        <h3>${product.title}</h3>
-                        <p>$${product.price}</p>
-                    </a>
-                    <div class="favorite-icon ${favorites.includes(product.id.toString()) ? 'filled' : ''}" data-product-id="${product.id}" onclick="toggleFavorite(this, ${product.id})"><i class="far fa-heart"></i></div>
-                `;
-                productList.appendChild(div);
-            });
-            updateFavoriteIcons();
+            if (productList) {
+                productList.innerHTML = '';
+                data.products.forEach(product => {
+                    let secondaryImage = product.images[1] ? product.images[1] : product.thumbnail;
+                    let div = document.createElement('div');
+                    div.className = 'product-card';
+                    div.innerHTML = `
+                        <a href="product.html?id=${product.id}">
+                            <div class="product-image">
+                                <img src="${product.thumbnail}" alt="${product.title}" class="primary">
+                                <img src="${secondaryImage}" alt="${product.title}" class="secondary">
+                            </div>
+                            <h3>${product.title}</h3>
+                            <p>$${product.price}</p>
+                        </a>
+                        <div class="favorite-icon ${favorites.includes(product.id.toString()) ? 'filled' : ''}" data-product-id="${product.id}" onclick="toggleFavorite(this, ${product.id})"><i class="far fa-heart"></i></div>
+                    `;
+                    productList.appendChild(div);
+                });
+                updateFavoriteIcons();
+
+            }
         })
         .catch(error => console.error('Error fetching search results:', error));
 }
@@ -549,6 +598,7 @@ function updateCartQuantity(productId, quantity) {
         cart[cartIndex].quantity = parseInt(quantity);
         localStorage.setItem('cart', JSON.stringify(cart));
         loadCartProducts();
+        updateCartBadge();
     }
 }
 
@@ -691,34 +741,64 @@ function loadCheckoutItems() {
     });
 }
 
+function attachBuyButtonListener() {
+    const buyButton = document.querySelector('.buy-button');
+    if (buyButton) {
+        buyButton.addEventListener('click', function() {
+            alert('Order placed successfully!');
+            // Clear cart
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCartProducts();
 
-document.querySelector('.buy-button').addEventListener('click', function() {
-    alert('Order placed successfully!');
-    // Clear cart
-    cart = [];
-    localStorage.setItem('cart', JSON.stringify(cart));
-    loadCartProducts();
+            // Display thank you message and continue shopping button
+            const checkoutContainer = document.querySelector('.checkout-container');
+            checkoutContainer.innerHTML = `
+                <div class="thank-you-message">
+                    <h2>Thank you for your order</h2>
+                    <button class="continue-shopping-button">Continue Shopping</button>
+                </div>
+            `;
+            
+            const continueShoppingButton = document.querySelector('.continue-shopping-button');
+            continueShoppingButton.addEventListener('click', function() {
+                window.location.href = 'index.html';
+            });
+        });
+    } else {
+        console.error('Element with class "buy-button" not found');
+    }
+}
 
-    // Display thank you message and continue shopping button
-    const checkoutContainer = document.querySelector('.checkout-container');
-    checkoutContainer.innerHTML = `
-        <div class="thank-you-message">
-            <h2>Thank you for your order</h2>
-            <button class="continue-shopping-button">Continue Shopping</button>
-        </div>
-    `;
+// document.querySelector('.buy-button').addEventListener('click', function() {
+//     alert('Order placed successfully!');
+//     // Clear cart
+//     cart = [];
+//     localStorage.setItem('cart', JSON.stringify(cart));
+//     loadCartProducts();
+
+//     // Display thank you message and continue shopping button
+//     const checkoutContainer = document.querySelector('.checkout-container');
+//     checkoutContainer.innerHTML = `
+//         <div class="thank-you-message">
+//             <h2>Thank you for your order</h2>
+//             <button class="continue-shopping-button">Continue Shopping</button>
+//         </div>
+//     `;
     
-    const continueShoppingButton = document.querySelector('.continue-shopping-button');
-    continueShoppingButton.addEventListener('click', function() {
-        window.location.href = 'index.html';
-    });
-});
+//     const continueShoppingButton = document.querySelector('.continue-shopping-button');
+//     continueShoppingButton.addEventListener('click', function() {
+//         window.location.href = 'index.html';
+//     });
+// });
+
+
 // document.querySelector('.empty-cart-button').addEventListener('click', function(){
 //     console.log('hii');
 //     window.location.href = 'favorites.html';
 // });
 function displayEmptyCartView() {
-    document.querySelector('.checkout-container').style.display = 'none';
+    // document.querySelector('.checkout-container').style.display = 'none';
     document.getElementById('empty-cart-view').style.display = 'block';
     document.getElementById('view-saved-items').addEventListener('click', function() {
         console.log('hii');
@@ -731,15 +811,5 @@ function displayEmptyCartView() {
 //     window.location.href = 'favorites.html';
 // });
 
-document.getElementById('empty-cart-view').style.display = 'none';
+// document.getElementById('empty-cart-view').style.display = 'none';
 
-document.addEventListener('DOMContentLoaded', function() {
-    const hamburgerMenu = document.querySelector('.hamburger-menu');
-    const hamburgerContent = document.querySelector('.hamburger-content');
-    const navLinks = document.querySelector('.nav-links');
-
-    hamburgerMenu.addEventListener('click', function() {
-        hamburgerContent.classList.toggle('active');
-        navLinks.style.display = navLinks.style.display === 'none' ? 'flex' : 'none';
-    });
-});

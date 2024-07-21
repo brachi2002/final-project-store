@@ -175,6 +175,10 @@ html, body {
     padding: 20px;
 }
 
+.payment-methods img{
+    width: 20px;
+}
+
 .product-card {
     display: flex;
     flex-direction: column;
