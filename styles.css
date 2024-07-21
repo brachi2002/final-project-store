@@ -1282,6 +1282,7 @@ img {
     right: -400px;
     width: 400px;
     height: 100%;
+    overflow-y:auto;
     background-color: white;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
     transition: right 0.5s ease-in-out;
